@@ -1,5 +1,7 @@
 # EthernetClientSecure
 
+![Logo](images/logo.png)
+
 A secure Ethernet client library for Arduino/ESP32 that provides TLS/SSL support over Ethernet connections. This library wraps `SSLClient` and `EthernetClient` to offer a simple, secure communication interface with certificate validation and mutual authentication (mTLS) support.
 
 ## Features
