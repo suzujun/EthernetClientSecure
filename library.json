@@ -1,0 +1,41 @@
+{
+  "name": "EthernetClientSecure",
+  "version": "0.1.0",
+  "description": "Secure Ethernet client library with TLS/SSL support for Arduino/ESP32. Provides certificate validation via Trust Anchors and mutual authentication (mTLS) support.",
+  "keywords": [
+    "ethernet",
+    "secure",
+    "ssl",
+    "tls",
+    "tls-client",
+    "ssl-client",
+    "mutual-authentication",
+    "mtls",
+    "certificate",
+    "trust-anchor",
+    "esp32",
+    "arduino"
+  ],
+  "authors": {
+    "name": "suzujun",
+    "maintainer": true
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/suzujun/EthernetClientSecure.git"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/suzujun/EthernetClientSecure",
+  "frameworks": "arduino",
+  "platforms": "espressif32",
+  "dependencies": [
+    {
+      "name": "sstaub/Ethernet3",
+      "version": "^1.5.6"
+    },
+    {
+      "name": "openslab-osu/SSLClient",
+      "version": "^1.6.11"
+    }
+  ]
+}
