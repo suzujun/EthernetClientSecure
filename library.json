@@ -1,6 +1,6 @@
 {
   "name": "EthernetClientSecure",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Secure Ethernet client library with TLS/SSL support for Arduino/ESP32. Provides certificate validation via Trust Anchors and mutual authentication (mTLS) support.",
   "keywords": [
     "ethernet",
