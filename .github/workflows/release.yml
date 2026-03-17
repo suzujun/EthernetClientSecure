@@ -1,0 +1,48 @@
+# Release workflow: on tag push (v*), create GitHub Release and publish to PlatformIO Registry.
+# Prerequisites:
+#   - Create tag from main (e.g. git tag -a v0.1.2 -m "Release v0.1.2" && git push origin v0.1.2)
+#   - Ensure library.json version matches the tag (e.g. 0.1.2)
+#   - Add secret PLATFORMIO_AUTH_TOKEN in repo Settings > Secrets (from: pio account token)
+
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
+        with:
+          fetch-depth: 0
+
+      # Previous tag = second in version-descending order (current tag is first)
+      - name: Get previous tag
+        id: prev_tag
+        run: |
+          TAGS=$(git tag -l 'v*' --sort=-v:refname)
+          PREVIOUS=$(echo "$TAGS" | sed -n '2p')
+          echo "previous_tag=${PREVIOUS}" >> "$GITHUB_OUTPUT"
+
+      # Create release with notes auto-generated from commits since previous_tag
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@153bb8e04406b158c6c84fc1615b65b24149a1fe  # v2.6.1
+        with:
+          generate_release_notes: true
+          previous_tag: ${{ steps.prev_tag.outputs.previous_tag }}
+          fail_on_unmatched_files: false
+
+      - name: Set up PlatformIO
+        run: pip install -U platformio
+
+      - name: Publish to PlatformIO Registry
+        run: pio pkg publish --no-interactive
+        env:
+          PLATFORMIO_AUTH_TOKEN: ${{ secrets.PLATFORMIO_AUTH_TOKEN }}
