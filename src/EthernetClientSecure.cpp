@@ -62,8 +62,12 @@ bool EthernetClientSecure::begin(const br_x509_trust_anchor *trust_anchors, size
   // Initialize SSLClient with Trust Anchor format root certificates
   impl->ssl_client = new SSLClient(*impl->eth_client, trust_anchors, trust_anchors_num, analog_pin);
 
-  // Set timeout (default 5 seconds)
-  impl->ssl_client->setTimeout(5000);
+  // Set timeout on both SSLClient and underlying EthernetClient so that read() behaviour
+  // is consistent across the stack; otherwise the TCP layer may report no data and the
+  // connection may be treated as closed.
+  const uint32_t defaultTimeoutMs = 15000;
+  impl->ssl_client->setTimeout(defaultTimeoutMs);
+  impl->eth_client->setTimeout(defaultTimeoutMs);
 
   impl->initialized = true;
   initialized = true;
@@ -166,6 +170,10 @@ void EthernetClientSecure::setTimeout(uint32_t timeout) {
 
   if (impl->ssl_client != nullptr) {
     impl->ssl_client->setTimeout(timeout);
+  }
+  // Propagate to underlying EthernetClient so read behaviour is consistent.
+  if (impl->eth_client != nullptr) {
+    impl->eth_client->setTimeout(timeout);
   }
 }
 

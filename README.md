@@ -120,10 +120,10 @@ Checks if the client is currently connected.
 
 #### `void setTimeout(uint32_t timeout)`
 
-Sets the connection timeout.
+Sets the read/connection timeout for both the SSL layer and the underlying Ethernet client, so behaviour is consistent across the stack.
 
 - **Parameters**:
-  - `timeout`: Timeout in milliseconds (default: 5000ms)
+  - `timeout`: Timeout in milliseconds (default: 15000ms)
 
 #### `SSLClient *getSSLClient()`
 
@@ -242,7 +242,8 @@ The library uses the PIMPL (Pointer to Implementation) pattern to hide implement
 
 - Currently tested on ESP32 (M5Stack Core2)
 - Requires sufficient memory for certificate storage
-- Connection timeout defaults to 5 seconds (configurable)
+- Connection timeout defaults to 15 seconds (configurable via `setTimeout()`; also applied to the underlying Ethernet client)
+- TCP keepalive is not configured by this library
 
 ## License
 
